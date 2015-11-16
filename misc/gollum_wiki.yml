@@ -1,0 +1,13 @@
+
+# please don't touch wiki_path
+wiki_path: /wiki
+wiki_repo: wiki.git
+
+default_markup: :markdown
+
+wiki_options:
+        :mathjax: true
+        :live_preview: true
+        :universal_toc: false
+        :repo_is_bare: true
+

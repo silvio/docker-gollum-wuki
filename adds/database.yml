@@ -1,0 +1,7 @@
+
+production:
+        adapter: sqlite3
+        database: /wiki/wuki.sqlite3
+        pool: 5
+        timeout: 5000
+
