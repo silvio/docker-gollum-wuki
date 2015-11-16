@@ -7,10 +7,12 @@ ENV LANG C.UTF-8
 RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 ENV PORTNUMBER 5555
+ENV GIT_ADAPTER grit
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -y \
     && apt-get install -y \
+	cmake \
 	git \
 	libicu-dev \
 	libssh-dev \
@@ -27,7 +29,8 @@ WORKDIR /wuki
 VOLUME /wiki
 
 ENV RACK_ENV production
-RUN bundle install
+RUN gem install --pre gollum-rugged_adapter ;\
+    bundle install
 
 ADD adds/start.sh /start.sh
 ADD adds/database.yml /wuki/config/database.yml
