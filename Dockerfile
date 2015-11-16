@@ -8,6 +8,8 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 ENV PORTNUMBER 5555
 ENV GIT_ADAPTER grit
+ENV PULLNPUSHACTIVATE 0
+ENV PULLNPUSHINTERVAL 60
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -y \

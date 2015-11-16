@@ -35,5 +35,21 @@ cp /wiki/gollum_wiki.yml /wuki/gollum_wiki.yml
 message "migrate user access database"
 rake db:migrate
 
+if [[ "${PULLNPUSHACTIVATE}" == "1" ]]; then
+	wp=$(grep wiki_path /wuki/gollum_wiki.yml | cut -d " " -f 2)
+	wr=$(grep wiki_repo /wuki/gollum_wiki.yml | cut -d " " -f 2)
+	message "start synchonisation subshell for ${wp}/${wr}"
+	(
+		while true; do
+			sleep ${PULLNPUSHINTERVAL}
+			message "run git pull'n'push"
+			if [[ -e "${wp}/${wr}" ]]; then
+				git -C ${wp}/${wr} pull -q
+				git -C ${wp}/${wr} push -q
+			fi
+		done
+	) &
+fi
+
 message "start wiku"
 rackup -E production -o 0.0.0.0 -p ${PORTNUMBER} config.ru
