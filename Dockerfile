@@ -31,7 +31,10 @@ WORKDIR /wuki
 VOLUME /wiki
 
 ENV RACK_ENV production
-RUN gem install --pre gollum-rugged_adapter ;\
+RUN gem install --pre \
+    gollum-rugged_adapter \
+    github-markdown \
+    ;\
     bundle install
 
 ADD adds/start.sh /start.sh
