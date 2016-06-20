@@ -4,14 +4,20 @@ FROM alpine:latest
 MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
 
 ENV LANG C.UTF-8
-RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 ENV PORTNUMBER 5555
 ENV GIT_ADAPTER grit
 ENV PULLNPUSHACTIVATE 0
 ENV PULLNPUSHINTERVAL 60
 
-RUN apk update ; \
+ENV RACK_ENV production
+
+ADD https://github.com/silvio/wuki/archive/master.zip /master.zip
+ADD adds/* adds/
+ADD misc/* misc/
+
+RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime ; \
+    apk update ; \
     apk add \
 	bash \
 	cmake \
@@ -31,27 +37,41 @@ RUN apk update ; \
 	sqlite-dev \
 	sqlite-libs \
 	unzip \
-    && rm -rf /var/cache/apk/*
-
-ADD https://github.com/silvio/wuki/archive/master.zip /master.zip
-RUN unzip master.zip ;\
+	; \
+    unzip master.zip ;\
     mv wuki-master wuki ;\
-    mv wuki/gollum_wiki.yml wuki/gollum_wiki.yml.tmpl
+    mv wuki/gollum_wiki.yml wuki/gollum_wiki.yml.tmpl \
+    ; \
+    cd wuki ; \
+    gem install --pre \
+	bigdecimal \
+	gollum-rugged_adapter \
+	github-markdown \
+	; \
+    bundle install \
+    ; \
+    ln -sf /adds/start.sh /start.sh ; \
+    ln -sf /adds/database.yml /wuki/config/database.yml ; \
+    chmod u+x /start.sh ; \
+    chmod a+rwx -R /wuki ; \
+    apk del \
+	cmake \
+	gcc \
+	g++ \
+	ruby-bundler \
+	ruby-dev \
+	ruby-rdoc \
+	ruby-irb \
+	icu-dev \
+	libssh-dev \
+	sqlite-dev \
+	zlib-dev \
+	make \
+	musl-dev \
+	; \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /wuki
 VOLUME /wiki
-
-ENV RACK_ENV production
-RUN gem install --pre \
-    bigdecimal \
-    gollum-rugged_adapter \
-    github-markdown \
-    ;\
-    bundle install
-
-ADD adds/start.sh /start.sh
-ADD adds/database.yml /wuki/config/database.yml
-RUN chmod u+x /start.sh ;\
-    chmod a+rwx -R /wuki
 
 ENTRYPOINT ["/start.sh"]
