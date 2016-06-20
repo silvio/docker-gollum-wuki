@@ -16,7 +16,7 @@ empty `wiki.git` repository and user access database.
 Per default the running gollum is listening on port `5555`. It can be changed
 via `-e PORTNUMBER=xyz`.
 
-`Gollum` doesn't support pushing of commits to a "parent" repository. We
+`Gollum` doesn't support pushing of commits to the `origin` repository. We
 simulate this with a simple `git pull && git push` at every `PULLNPUSHINTERVAL`
 seconds, if `PULLNPUSHACTIVATE` is set to `1`. To activate this feature set `-e
 PULLNPUSHINTERVAL=60 -e PULLNPUSHACTIVATE=1` as environment variable. This
