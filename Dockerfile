@@ -1,5 +1,5 @@
 
-FROM ruby
+FROM alpine:latest
 
 MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
 
@@ -11,19 +11,30 @@ ENV GIT_ADAPTER grit
 ENV PULLNPUSHACTIVATE 0
 ENV PULLNPUSHINTERVAL 60
 
-RUN export DEBIAN_FRONTEND=noninteractive \
-    && apt-get update -y \
-    && apt-get install -y \
+RUN apk update ; \
+    apk add \
+	bash \
 	cmake \
+	gcc \
+	g++ \
 	git \
-	libicu-dev \
+	icu-dev \
 	libssh-dev \
+	zlib-dev \
+	make \
+	musl-dev \
+	ruby \
+	ruby-bundler \
+	ruby-dev \
+	ruby-rdoc \
+	ruby-irb \
+	sqlite-dev \
+	sqlite-libs \
 	unzip \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/cache/apk/*
 
-RUN wget https://github.com/silvio/wuki/archive/master.zip ;\
-    unzip master.zip ;\
+ADD https://github.com/silvio/wuki/archive/master.zip /master.zip
+RUN unzip master.zip ;\
     mv wuki-master wuki ;\
     mv wuki/gollum_wiki.yml wuki/gollum_wiki.yml.tmpl
 
@@ -32,6 +43,7 @@ VOLUME /wiki
 
 ENV RACK_ENV production
 RUN gem install --pre \
+    bigdecimal \
     gollum-rugged_adapter \
     github-markdown \
     ;\
