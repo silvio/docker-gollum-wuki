@@ -18,25 +18,28 @@ ADD misc/* misc/
 
 RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime ; \
     apk update ; \
-    apk add \
+    apk add -t base \
 	bash \
-	cmake \
-	gcc \
-	g++ \
 	git \
 	icu-dev \
-	libssh-dev \
-	zlib-dev \
-	make \
-	musl-dev \
 	ruby \
-	ruby-bundler \
-	ruby-dev \
-	ruby-rdoc \
-	ruby-irb \
-	sqlite-dev \
 	sqlite-libs \
 	unzip \
+	zlib-dev \
+	; \
+    apk add -t devel \
+	cmake \
+	g++ \
+	gcc \
+	icu-dev \
+	libssh-dev \
+	make \
+	musl-dev \
+	ruby-bundler \
+	ruby-dev \
+	ruby-irb \
+	sqlite-dev \
+	zlib-dev \
 	; \
     unzip master.zip ;\
     mv wuki-master wuki ;\
@@ -49,21 +52,7 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime ; \
     ln -sf /adds/database.yml /wuki/config/database.yml ; \
     chmod u+x /start.sh ; \
     chmod a+rwx -R /wuki ; \
-    apk del \
-	cmake \
-	gcc \
-	g++ \
-	ruby-bundler \
-	ruby-dev \
-	ruby-rdoc \
-	ruby-irb \
-	icu-dev \
-	libssh-dev \
-	sqlite-dev \
-	zlib-dev \
-	make \
-	musl-dev \
-	; \
+    apk del devel ;\
     rm -rf /var/cache/apk/*
 
 WORKDIR /wuki
