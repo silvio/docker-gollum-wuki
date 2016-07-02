@@ -43,11 +43,6 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime ; \
     mv wuki/gollum_wiki.yml wuki/gollum_wiki.yml.tmpl \
     ; \
     cd wuki ; \
-    gem install --pre \
-	bigdecimal \
-	gollum-rugged_adapter \
-	github-markdown \
-	; \
     bundle install \
     ; \
     ln -sf /adds/start.sh /start.sh ; \
